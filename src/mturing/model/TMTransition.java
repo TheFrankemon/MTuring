@@ -6,40 +6,37 @@
 
 package mturing.model;
 
-import mturing.data.Constants;
-import mturing.model.basics.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import mturing.data.Constants;
+import mturing.model.basics.Point;
 
 /**
  *
  * @author Allan Leon
  */
-public class Transition {
+public class TMTransition {
+    
+    public enum TMMovement {
+        LEFT, RIGHT
+    };
     
     private State initialState;
-    private Set<Character> symbols;
+    private Set<TMTransitionInfo> options;
     private State nextState;
     private Point startPos;
     private Point endPos;
     
-    public Transition(State initialState, State nextState) {
+    public TMTransition(State initialState, State nextState) {
         this.initialState = initialState;
-        this.symbols = new HashSet<>();
         this.nextState = nextState;
+        this.options = new HashSet<>();
         calculatePos();
     }
-
-    public Transition(State initialState, char symbol, State nextState) {
-        this.initialState = initialState;
-        this.symbols = new HashSet<>();
-        this.nextState = nextState;
-        symbols.add(symbol);
-    }
-
+    
     /**
      * @return the initialState
      */
@@ -48,14 +45,10 @@ public class Transition {
     }
 
     /**
-     * @return the symbols
+     * @return the options
      */
-    public Set<Character> getSymbols() {
-        return symbols;
-    }
-    
-    public void addSymbol(Character symbol) {
-        symbols.add(symbol);
+    public Set<TMTransitionInfo> getOptions() {
+        return options;
     }
 
     /**
@@ -66,6 +59,24 @@ public class Transition {
     }
 
     /**
+     * @return the startPos
+     */
+    public Point getStartPos() {
+        return startPos;
+    }
+
+    /**
+     * @return the endPos
+     */
+    public Point getEndPos() {
+        return endPos;
+    }
+    
+    public void addOption(TMTransitionInfo option) {
+        options.add(option);
+    }
+
+    /**
      * @param initialState the initialState to set
      */
     public void setInitialState(State initialState) {
@@ -73,10 +84,10 @@ public class Transition {
     }
 
     /**
-     * @param symbols the symbols to set
+     * @param options the options to set
      */
-    public void setSymbols(Set<Character> symbols) {
-        this.symbols = symbols;
+    public void setOptions(Set<TMTransitionInfo> options) {
+        this.options = options;
     }
 
     /**
@@ -85,21 +96,67 @@ public class Transition {
     public void setNextState(State nextState) {
         this.nextState = nextState;
     }
+
+    /**
+     * @param startPos the startPos to set
+     */
+    public void setStartPos(Point startPos) {
+        this.startPos = startPos;
+    }
+
+    /**
+     * @param endPos the endPos to set
+     */
+    public void setEndPos(Point endPos) {
+        this.endPos = endPos;
+    }
     
-    public List<Configuration> execute(Configuration current) throws TransitionException {
+    /*public List<Configuration> execute(Configuration current) throws TransitionException {
         List<Configuration> nextConfigurations = new ArrayList<>();
-        if (current.getState().equals(initialState)) {    
-            for (Character symbol : symbols) {
-                if (!current.getWord().equals("")) {
-                    if (symbol == '\u03B5') {
-                        nextConfigurations.add(new Configuration(nextState, current.getWord()));
-                    } else if (current.getWord().charAt(0) == symbol) {
-                        nextConfigurations.add(new Configuration(nextState, current.getWord().substring(1)));
+        
+        if (current.getState().equals(initialState)) {
+            for (TransitionInfo info : options) {
+                if (current.matches(info.getTop())) {
+                    if (info.getSymbol() == Constants.EPSILON) {
+                        nextConfigurations.add(new Configuration(nextState,
+                                current.getWord(), current.updateStack(info.getNextTop())));
+                    } else if (!current.wordIsEmpty()) {
+                        if (current.getWord().charAt(0) == info.getSymbol()) {
+                        nextConfigurations.add(new Configuration(nextState,
+                                current.getWord().substring(1), current.updateStack(info.getNextTop())));
+                        }
                     }
                 }
             }
         }
         return nextConfigurations;
+    }*/
+    
+    public TMConfiguration execute(TMConfiguration current) throws TransitionException {        
+        if (current.getState().equals(initialState)) {
+            for (TMTransitionInfo info : options) {
+                return current.execute(info);
+            }
+        }
+        throw new TransitionException("There are no transitions to be executed!");
+    }
+    
+    public String getTransitionText() {
+        if (options.isEmpty()) {
+            return "";
+        } else {
+            String transitionText = "";
+            for (TMTransitionInfo info : options) {
+                transitionText += info.toString() + ";";
+            }
+            transitionText = transitionText.substring(0, transitionText.length() - 1);
+            return transitionText;
+        }
+    }
+    
+    public void calculatePos() {
+        startPos = getCircleLineIntersectionPoint(initialState.getPos(), nextState.getPos(), initialState.getPos(), true);
+        endPos = getCircleLineIntersectionPoint(initialState.getPos(), nextState.getPos(), nextState.getPos(), false);
     }
     
     public static Point getCircleLineIntersectionPoint(Point pointA, Point pointB,
@@ -139,44 +196,12 @@ public class Transition {
         }
         return false;
     }
-    
-    public String getTransitionText() {
-        if (symbols.isEmpty()) {
-            return "";
-        } else {
-            String transitionText = "";
-            for (Character symbol : symbols) {
-                transitionText += symbol + ",";
-            }
-            transitionText = transitionText.substring(0, transitionText.length() - 1);
-            return transitionText;
-        }
-    }
-    
-    /**
-     * @return the startPos
-     */
-    public Point getStartPos() {
-        return startPos;
-    }
 
-    /**
-     * @return the endPos
-     */
-    public Point getEndPos() {
-        return endPos;
-    }
-    
-    public void calculatePos() {
-        startPos = getCircleLineIntersectionPoint(initialState.getPos(), nextState.getPos(), initialState.getPos(), true);
-        endPos = getCircleLineIntersectionPoint(initialState.getPos(), nextState.getPos(), nextState.getPos(), false);
-    }
-    
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.initialState);
-        hash = 79 * hash + Objects.hashCode(this.nextState);
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.initialState);
+        hash = 41 * hash + Objects.hashCode(this.nextState);
         return hash;
     }
 
@@ -188,7 +213,7 @@ public class Transition {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Transition other = (Transition) obj;
+        final TMTransition other = (TMTransition) obj;
         if (!Objects.equals(this.initialState, other.initialState)) {
             return false;
         }
@@ -196,5 +221,5 @@ public class Transition {
             return false;
         }
         return true;
-    }
+    }    
 }

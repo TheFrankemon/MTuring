@@ -1,67 +1,133 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package mturing.model;
 
-import mturing.model.basics.Point;
-import mturing.view.MainFrame;
-import mturing.view.MainFrame.DrawingState;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mturing.model.basics.Point;
+import mturing.view.MainFrame;
 
 /**
  *
  * @author Allan Leon
  */
-public class Automaton {
+public class TuringMachine {
     
     private Set<State> states;
-    private List<Transition> transitions;
-    private List<Set<Configuration>> configurations;
+    private List<TMTransition> transitions;
+    //private List<Set<TMConfiguration>> configurations;
+    private TMConfiguration configuration;
     private List<State> reachableStates;
     private State initialState;
     private int createdStatesQuantity;
     
-    public Automaton() {
+    public TuringMachine() {
         states = new HashSet<>();
         reachableStates = new ArrayList<>();
         transitions = new ArrayList<>();
         initialState = null;
-        configurations = new ArrayList<>();
+        //configurations = new ArrayList<>();
         createdStatesQuantity = 0;
     }
 
+    /**
+     * @return the states
+     */
     public Set<State> getStates() {
         return states;
     }
 
-    public void setStates(Set<State> states) {
-        this.states = states;
-    }
-
-    public List<Transition> getTransitions() {
+    /**
+     * @return the transitions
+     */
+    public List<TMTransition> getTransitions() {
         return transitions;
     }
-    
-    public List<Set<Configuration>> getConfigurations() {
+
+    /**
+     * @return the configurations
+     */
+    /*public List<Set<TMConfiguration>> getConfigurations() {
         return configurations;
-    }
+    }*/
     
-    public int getCreatedStatesQuantity() {
-        return createdStatesQuantity;
+    public TMConfiguration getConfiguration() {
+        return configuration;
     }
 
-    public void setTransitions(ArrayList<Transition> transitions) {
-        this.transitions = transitions;
+    /**
+     * @return the reachableStates
+     */
+    public List<State> getReachableStates() {
+        return reachableStates;
     }
 
+    /**
+     * @return the initialState
+     */
     public State getInitialState() {
         return initialState;
     }
 
+    /**
+     * @return the createdStatesQuantity
+     */
+    public int getCreatedStatesQuantity() {
+        return createdStatesQuantity;
+    }
+
+    /**
+     * @param states the states to set
+     */
+    public void setStates(Set<State> states) {
+        this.states = states;
+    }
+
+    /**
+     * @param transitions the transitions to set
+     */
+    public void setTransitions(List<TMTransition> transitions) {
+        this.transitions = transitions;
+    }
+
+    /**
+     * @param configurations the configurations to set
+     */
+    /*public void setConfigurations(List<Set<TMConfiguration>> configurations) {
+        this.configurations = configurations;
+    }*/
+    
+    public void setConfiguration(TMConfiguration configuration) {
+        this.configuration = configuration;
+    }
+
+    /**
+     * @param reachableStates the reachableStates to set
+     */
+    public void setReachableStates(List<State> reachableStates) {
+        this.reachableStates = reachableStates;
+    }
+
+    /**
+     * @param initialState the initialState to set
+     */
     public void setInitialState(State initialState) {
         this.initialState = initialState;
+    }
+
+    /**
+     * @param createdStatesQuantity the createdStatesQuantity to set
+     */
+    public void setCreatedStatesQuantity(int createdStatesQuantity) {
+        this.createdStatesQuantity = createdStatesQuantity;
     }
     
     public void addState(State state) {
@@ -73,8 +139,8 @@ public class Automaton {
         addState(new State(String.format("q%d", createdStatesQuantity), false, clickedPoint));
     }
     
-    public Transition createTransition(State initial, State next) {
-        Transition newTransition = new Transition(initial, next);
+    public TMTransition createTransition(State initial, State next) {
+        TMTransition newTransition = new TMTransition(initial, next);
         int i = 0;
         boolean found = false;
         while (i < transitions.size() && !found) {
@@ -90,7 +156,7 @@ public class Automaton {
         return newTransition;
     }
     
-    public void addTransition(Transition transition) {
+    public void addTransition(TMTransition transition) {
         transitions.add(transition);
     }
     
@@ -109,10 +175,11 @@ public class Automaton {
         }
     }
     
-    public void removeTransition(Transition transition) {
+    public void removeTransition(TMTransition transition) {
         transitions.remove(transition);
     }
     
+    /*
     public void start(String word) {
         configurations.clear();
         Set<Configuration> startList = new HashSet<>();
@@ -149,6 +216,27 @@ public class Automaton {
         }
         return false;
     }
+    */
+    
+    public void start(String word) {
+        configuration = new TMConfiguration(initialState, word.toCharArray(), 0);
+        configuration.increaseLeftWord();
+        configuration.increaseRightWord();
+    }
+    
+    public boolean next() {
+        if (!configuration.isDead()) {
+            for (TMTransition transition : transitions) {
+                try {
+                    configuration = transition.execute(configuration);
+                    return true;
+                } catch (TransitionException ex) {
+                    configuration.setDead(true);
+                }
+            }
+        }
+        return false;
+    }
     
     private boolean checkAcceptedStates() {
         for (State state : states) {
@@ -174,7 +262,7 @@ public class Automaton {
         }
         reachableStates.add(initialState);
         for (int i = 0; i < reachableStates.size(); i++) {
-            for (Transition transition : transitions) {
+            for (TMTransition transition : transitions) {
                 if (transition.getInitialState().equals(reachableStates.get(i))) {
                     if (!reachableStates.contains(transition.getNextState())) {
                         reachableStates.add(transition.getNextState());
@@ -195,11 +283,11 @@ public class Automaton {
         for (State current : unreachableStates) {
             removeState(current);
         }
-        MainFrame.drawingState = DrawingState.Drawing;
+        MainFrame.drawingState = MainFrame.DrawingState.Drawing;
     }
     
     public void updateTransitions() {
-        for (Transition current : transitions) {
+        for (TMTransition current : transitions) {
             current.calculatePos();
         }
     }
