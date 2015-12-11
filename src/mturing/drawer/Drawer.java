@@ -26,7 +26,7 @@ public class Drawer {
     private static final int ARR_SIZE = 5;
 
     private static void putPixel(Graphics g, int x, int y) {
-        g.drawLine(x, Constants.PANEL_HEIGHT - y, x, Constants.PANEL_HEIGHT - y);
+        g.drawLine(x, Constants.MAINFRAME_PANEL_HEIGHT - y, x, Constants.MAINFRAME_PANEL_HEIGHT - y);
     }
 
     public static void drawLine(Graphics g, int x0, int y0, int x1, int y1, Color color) {
@@ -154,7 +154,7 @@ public class Drawer {
 //        g2d.fillPolygon(ints, ints1, y0);
         Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3}, 0);
         g2d.setStroke(dashed);
-        g2d.drawOval(x0 + 6, Constants.PANEL_HEIGHT - y0 - Constants.STATE_RADIUS - 15, 20, 20);
+        g2d.drawOval(x0 + 6, Constants.MAINFRAME_PANEL_HEIGHT - y0 - Constants.STATE_RADIUS - 15, 20, 20);
         g2d.dispose();
     }
 
@@ -194,8 +194,8 @@ public class Drawer {
 
     private static void drawArrow(Graphics g1, Point p1, Point p2) {
         Graphics2D g = (Graphics2D) g1.create();
-        int y1 = Constants.PANEL_HEIGHT - p1.getY();
-        int y2 = Constants.PANEL_HEIGHT - p2.getY();
+        int y1 = Constants.MAINFRAME_PANEL_HEIGHT - p1.getY();
+        int y2 = Constants.MAINFRAME_PANEL_HEIGHT - p2.getY();
         double dx = p2.getX() - p1.getX();
         double dy = y2 - y1;
         double angle = Math.atan2(dy, dx);
@@ -227,14 +227,14 @@ public class Drawer {
             g.setColor(Color.YELLOW);
             g.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             g.drawString(transition.getTransitionText(), start.getX() + Constants.STATE_RADIUS + 7,
-                    Constants.PANEL_HEIGHT - start.getY() - 35);
+                    Constants.MAINFRAME_PANEL_HEIGHT - start.getY() - 35);
         } else {
             drawDashedLine(g, start.getX(), start.getY(), end.getX(), end.getY(), Color.WHITE);
             drawArrow(g, start, end);
             g.setColor(Color.YELLOW);
             g.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             g.drawString(transition.getTransitionText(), (start.getX() + end.getX()) / 2,
-                    Constants.PANEL_HEIGHT - ((start.getY() + end.getY()) / 2) - 5);
+                    Constants.MAINFRAME_PANEL_HEIGHT - ((start.getY() + end.getY()) / 2) - 5);
         }
     }
 
@@ -258,10 +258,10 @@ public class Drawer {
             drawCircle(g, state.getPos().getX(), state.getPos().getY(), Constants.STATE_RADIUS, Color.ORANGE);
         }
         g.setColor(Color.DARK_GRAY);
-        g.fillRect(state.getPos().getX() - 6, Constants.PANEL_HEIGHT - state.getPos().getY() - 8, 15, 15);
+        g.fillRect(state.getPos().getX() - 6, Constants.MAINFRAME_PANEL_HEIGHT - state.getPos().getY() - 8, 15, 15);
         g.setColor(Color.MAGENTA);
         g.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        g.drawString(state.getName(), state.getPos().getX() - 5, Constants.PANEL_HEIGHT - state.getPos().getY() + 3);
+        g.drawString(state.getName(), state.getPos().getX() - 5, Constants.MAINFRAME_PANEL_HEIGHT - state.getPos().getY() + 3);
     }
 
     public static void drawTransitions(Graphics g, List<TMTransition> transitions) {
@@ -276,18 +276,17 @@ public class Drawer {
         }
     }
 
-    public static void drawAutomaton(Graphics g, TuringMachine turingMachine) {
+    public static void drawTuringMachine(Graphics g, TuringMachine turingMachine) {
         drawTransitions(g, turingMachine.getTransitions());
         drawStates(g, turingMachine.getStates());
         drawInitialStateArrow(g, turingMachine.getInitialState());
     }
-
-    public static void drawConfiguration(Graphics g, TMConfiguration conf) {
-        g.setColor(Color.BLACK);
-        g.drawOval(Constants.STATE_RADIUS + 5, Constants.CONFIGURATION_HEIGHT / 2, Constants.STATE_RADIUS, Constants.STATE_RADIUS);
-        System.out.printf("%d %d\n", Constants.STATE_RADIUS + 5, Constants.CONFIGURATION_HEIGHT / 2);
-        //drawCircle(g, Constants.STATE_RADIUS + 5, Constants.CONFIGURATION_HEIGHT / 2, Constants.STATE_RADIUS, Color.BLACK);
-        g.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        g.drawString(conf.getWordString(), Constants.STATE_RADIUS * 2 + 5, Constants.CONFIGURATION_HEIGHT / 2);
+    
+    public static void drawTape(Graphics g, char[] tape, int posx) {
+        g.setColor(Color.GREEN);
+        g.setFont(new Font("Segoe UI", Font.PLAIN, 24));
+        String shown = new String(tape);
+        g.drawString(shown, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
+        System.out.printf("%s %d %d\n", shown, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
     }
 }

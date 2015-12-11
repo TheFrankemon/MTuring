@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+/build/
+=======
 build/
 bin/
 gen/
@@ -12,3 +15,4 @@ nb-configuration.xml
 *.jar
 *.war
 *.ear
+>>>>>>> origin/master

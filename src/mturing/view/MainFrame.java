@@ -72,7 +72,7 @@ public class MainFrame extends JFrame implements ActionListener {
      * Initialize and set up the basic components of the frame.
      */
     private void initialize() {
-        setTitle("jFlop");
+        setTitle("TURINGO");
         BufferedImage img;
         try {
             img = ImageIO.read(this.getClass().getResource("/mturing/fsm.jpg"));
@@ -81,7 +81,7 @@ public class MainFrame extends JFrame implements ActionListener {
         } catch (IOException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+        setSize(Constants.MAINFRAME_WIDTH, Constants.MAINFRAME_HEIGHT);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -90,7 +90,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
         panel = new JPanel();
         panel.setBackground(Color.DARK_GRAY);
-        panel.setBounds(10, 10, Constants.PANEL_WIDTH, Constants.PANEL_HEIGHT);
+        panel.setBounds(10, 10, Constants.MAINFRAME_PANEL_WIDTH, Constants.MAINFRAME_PANEL_HEIGHT);
         mouseHandler = new MouseHandler(this);
         panel.addMouseListener(mouseHandler);
         panel.addMouseMotionListener(mouseHandler);
@@ -144,10 +144,10 @@ public class MainFrame extends JFrame implements ActionListener {
             }
         });
 
-        stateTool.setBounds(Constants.WINDOW_WIDTH / 4 - 150, Constants.WINDOW_HEIGHT - 60, 100, 25);
-        transitionTool.setBounds(Constants.WINDOW_WIDTH / 4 - 40, Constants.WINDOW_HEIGHT - 60, 130, 25);
-        IFStateTool.setBounds(Constants.WINDOW_WIDTH / 2 - 100, Constants.WINDOW_HEIGHT - 60, 130, 25);
-        input.setBounds(Constants.WINDOW_WIDTH - 200, Constants.WINDOW_HEIGHT - 60, 130, 25);
+        stateTool.setBounds(Constants.MAINFRAME_WIDTH / 4 - 150, Constants.MAINFRAME_HEIGHT - 60, 100, 25);
+        transitionTool.setBounds(Constants.MAINFRAME_WIDTH / 4 - 40, Constants.MAINFRAME_HEIGHT - 60, 130, 25);
+        IFStateTool.setBounds(Constants.MAINFRAME_WIDTH / 2 - 100, Constants.MAINFRAME_HEIGHT - 60, 130, 25);
+        input.setBounds(Constants.MAINFRAME_WIDTH - 200, Constants.MAINFRAME_HEIGHT - 60, 130, 25);
 
         getContentPane().add(panel);
         getContentPane().add(stateTool);
@@ -155,7 +155,7 @@ public class MainFrame extends JFrame implements ActionListener {
         getContentPane().add(IFStateTool);
         getContentPane().add(input);
 
-        doubleBuffer = new BufferedImage(Constants.PANEL_WIDTH, Constants.PANEL_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        doubleBuffer = new BufferedImage(Constants.MAINFRAME_PANEL_WIDTH, Constants.MAINFRAME_PANEL_HEIGHT, BufferedImage.TYPE_INT_RGB);
         start();
     }
 
@@ -174,8 +174,8 @@ public class MainFrame extends JFrame implements ActionListener {
     private void paint() {
         dbg = doubleBuffer.getGraphics();
         dbg.setColor(Color.DARK_GRAY);
-        dbg.fillRect(0, 0, Constants.PANEL_WIDTH, Constants.PANEL_HEIGHT);
-        Drawer.drawAutomaton(dbg, turingMachine);
+        dbg.fillRect(0, 0, Constants.MAINFRAME_PANEL_WIDTH, Constants.MAINFRAME_PANEL_HEIGHT);
+        Drawer.drawTuringMachine(dbg, turingMachine);
         panel.getGraphics().drawImage(doubleBuffer, 0, 0, this);
         drawingState = DrawingState.Waiting;
     }
