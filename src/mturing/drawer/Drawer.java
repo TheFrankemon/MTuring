@@ -288,6 +288,6 @@ public class Drawer {
         System.out.printf("%d %d\n", Constants.STATE_RADIUS + 5, Constants.CONFIGURATION_HEIGHT / 2);
         //drawCircle(g, Constants.STATE_RADIUS + 5, Constants.CONFIGURATION_HEIGHT / 2, Constants.STATE_RADIUS, Color.BLACK);
         g.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        g.drawString(conf.getWord().toString(), Constants.STATE_RADIUS * 2 + 5, Constants.CONFIGURATION_HEIGHT / 2);
+        g.drawString(conf.getWordString(), Constants.STATE_RADIUS * 2 + 5, Constants.CONFIGURATION_HEIGHT / 2);
     }
 }

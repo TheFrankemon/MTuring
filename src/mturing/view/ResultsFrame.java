@@ -70,6 +70,7 @@ public class ResultsFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (turingMachine.next()) {
+                    System.out.println(turingMachine.getConfiguration().getWordString());
                     //addConfigurationsPanel(turingMachine.getConfigurations());
                 } else {
                     stepBtn.setEnabled(false);

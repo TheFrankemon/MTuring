@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+import mturing.model.TMTransitionInfo;
 
 /**
  *
@@ -25,11 +26,15 @@ import javax.swing.text.PlainDocument;
 public class TransitionSymbolDialog extends JDialog {
 
     private JPanel contentPane;
-    private JTextField textBox;
+    private JTextField readBox;
+    private JTextField writeBox;
+    private JTextField moveBox;
     private JButton addBtn;
     private JButton okBtn;
     private JButton xBtn;
-    private JLabel symbols;
+    private JLabel commaLbl;
+    private JLabel pipeLbl;
+    private JLabel options;
     private TMTransition transition;
 
     public TransitionSymbolDialog(JFrame parent, TMTransition transition) {
@@ -54,12 +59,30 @@ public class TransitionSymbolDialog extends JDialog {
         contentPane.setLayout(null);
         contentPane.setBackground(Color.BLACK);
 
-        textBox = new JTextField();
-        textBox.setDocument(new JTextFieldLimit(1));
-        textBox.addActionListener(new ActionListener() {
+        readBox = new JTextField();
+        readBox.setDocument(new JTextFieldLimit(1));
+        readBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                addSymbol();
+                addTransitionInfo();
+            }
+        });
+        
+        writeBox = new JTextField();
+        writeBox.setDocument(new JTextFieldLimit(1));
+        writeBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                addTransitionInfo();
+            }
+        });
+        
+        moveBox = new JTextField();
+        moveBox.setDocument(new JTextFieldLimit(1));
+        moveBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                addTransitionInfo();
             }
         });
 
@@ -69,7 +92,7 @@ public class TransitionSymbolDialog extends JDialog {
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addSymbol();
+                addTransitionInfo();
             }
         });
 
@@ -97,30 +120,48 @@ public class TransitionSymbolDialog extends JDialog {
             }
         });
 
-        symbols = new JLabel(transition.getTransitionText());
-        symbols.setForeground(Color.YELLOW);
+        options = new JLabel(transition.getTransitionText());
+        options.setForeground(Color.YELLOW);
+        
+        commaLbl = new JLabel(",");
+        commaLbl.setForeground(Color.WHITE);
+        pipeLbl = new JLabel("|");
+        pipeLbl.setForeground(Color.WHITE);
 
-        textBox.setBounds(70, 30, 100, 30);
+        readBox.setBounds(70, 30, 30, 30);
+        pipeLbl.setBounds(100, 30, 10, 30);
+        writeBox.setBounds(110, 30, 30, 30);
+        commaLbl.setBounds(140, 30, 10, 30);
+        moveBox.setBounds(150, 30, 30, 30);
         addBtn.setBounds(200, 30, 50, 30);
         okBtn.setBounds(260, 30, 60, 30);
         xBtn.setBounds(10, 30, 50, 30);
-        symbols.setBounds(10, 80, 350, 20);
+        options.setBounds(10, 80, 350, 20);
 
-        contentPane.add(textBox);
+        contentPane.add(readBox);
+        contentPane.add(pipeLbl);
+        contentPane.add(writeBox);
+        contentPane.add(commaLbl);
+        contentPane.add(moveBox);
         contentPane.add(addBtn);
         contentPane.add(okBtn);
         contentPane.add(xBtn);
-        contentPane.add(symbols);
+        contentPane.add(options);
     }
 
-    private void addSymbol() {
-        /*if (textBox.getText().length() == 0) {
-            transition.addSymbol('\u03B5');
-        } else {
-            transition.addSymbol(textBox.getText().charAt(0));
-            textBox.setText("");
+    private void addTransitionInfo() {
+        if (readBox.getText().length() > 0 && writeBox.getText().length() > 0 &&
+                (moveBox.getText().equals("<") || moveBox.getText().equals(">"))) {
+            TMTransition.TMMovement movement = TMTransition.TMMovement.RIGHT;
+            if (moveBox.getText().equals("<")) {
+                movement = TMTransition.TMMovement.LEFT;
+            }
+            transition.addOption(new TMTransitionInfo(readBox.getText().charAt(0), writeBox.getText().charAt(0), movement));
+            readBox.setText("");
+            writeBox.setText("");
+            moveBox.setText("");
+            options.setText(transition.getTransitionText());
         }
-        symbols.setText(transition.getTransitionText());*/
     }
 
     private void removeTransition() {
