@@ -75,7 +75,7 @@ public class MainFrame extends JFrame implements ActionListener {
         setTitle("jFlop");
         BufferedImage img;
         try {
-            img = ImageIO.read(this.getClass().getResource("/dfautomaton/fsm.jpg"));
+            img = ImageIO.read(this.getClass().getResource("/mturing/fsm.jpg"));
             Image dimg = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
             setIconImage(dimg);
         } catch (IOException ex) {
