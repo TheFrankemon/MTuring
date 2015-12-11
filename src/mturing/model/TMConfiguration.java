@@ -48,6 +48,14 @@ public class TMConfiguration {
     public char[] getWord() {
         return word;
     }
+    
+    public String getWordString() {
+        String res = "";
+        for (int i = 0; i < word.length; i++) {
+            res += word[i];
+        }
+        return res;
+    }
 
     /**
      * @return the head
@@ -120,7 +128,7 @@ public class TMConfiguration {
     }
     
     public void increaseLeftWord() {
-        Character[] temp = new Character[word.length + Constants.WORD_INCREASE];
+        char[] temp = new char[word.length + Constants.WORD_INCREASE];
         int i;
         for (i = 0; i < Constants.WORD_INCREASE; i++) {
             temp[i] = Constants.BLANK;
@@ -130,10 +138,11 @@ public class TMConfiguration {
             temp[i] = word[i - Constants.WORD_INCREASE];
         }
         head += Constants.WORD_INCREASE;
+        word = temp;
     }
     
     public void increaseRightWord() {
-        Character[] temp = new Character[word.length + Constants.WORD_INCREASE];
+        char[] temp = new char[word.length + Constants.WORD_INCREASE];
         int i;
         for (i = 0; i < word.length; i++) {
             temp[i] = word[i];
@@ -142,6 +151,7 @@ public class TMConfiguration {
         for (i = i; i < temp.length; i++) {
             temp[i] = Constants.BLANK;
         }
+        word = temp;
     }
 
     @Override

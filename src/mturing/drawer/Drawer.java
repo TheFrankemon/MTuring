@@ -281,7 +281,7 @@ public class Drawer {
         drawStates(g, turingMachine.getStates());
         drawInitialStateArrow(g, turingMachine.getInitialState());
     }
-
+    
     public static void drawTape(Graphics g, char[] tape, int posx) {
         g.setColor(Color.GREEN);
         g.setFont(new Font("Segoe UI", Font.PLAIN, 24));
