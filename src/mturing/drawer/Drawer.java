@@ -1,11 +1,8 @@
 package mturing.drawer;
 
 import mturing.data.Constants;
-import mturing.model.Automaton;
-import mturing.model.Configuration;
-import mturing.model.State;
-import mturing.model.State.StateType;
-import mturing.model.Transition;
+import mturing.model.TMState;
+import mturing.model.TMState.StateType;
 import mturing.model.basics.Point;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -16,6 +13,9 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 import java.util.Set;
+import mturing.model.TMConfiguration;
+import mturing.model.TMTransition;
+import mturing.model.TuringMachine;
 
 /**
  *
@@ -218,7 +218,7 @@ public class Drawer {
         putPixel(g, -x + centerX, y + centerY);
     }
 
-    public static void drawTransition(Graphics g, Transition transition) {
+    public static void drawTransition(Graphics g, TMTransition transition) {
         Point start = transition.getStartPos();
         Point end = transition.getEndPos();
         if (start.getX() == end.getX() && start.getY() == end.getY()) {
@@ -238,7 +238,7 @@ public class Drawer {
         }
     }
 
-    public static void drawInitialStateArrow(Graphics g, State state) {
+    public static void drawInitialStateArrow(Graphics g, TMState state) {
         if (state != null) {
             drawArrow(g, state.getPos().getX() - Constants.STATE_RADIUS - 18,
                     state.getPos().getY() - 30, state.getPos().getX() - Constants.STATE_RADIUS + 2,
@@ -246,7 +246,7 @@ public class Drawer {
         }
     }
 
-    public static void drawState(Graphics g, State state) {
+    public static void drawState(Graphics g, TMState state) {
         if (state.isAccepted()) {
             drawCircle(g, state.getPos().getX(), state.getPos().getY(), Constants.STATE_RADIUS * 2 / 3, Color.WHITE);
         }
@@ -264,22 +264,22 @@ public class Drawer {
         g.drawString(state.getName(), state.getPos().getX() - 5, Constants.MAINFRAME_PANEL_HEIGHT - state.getPos().getY() + 3);
     }
 
-    public static void drawTransitions(Graphics g, List<Transition> transitions) {
-        for (Transition transition : transitions) {
+    public static void drawTransitions(Graphics g, List<TMTransition> transitions) {
+        for (TMTransition transition : transitions) {
             drawTransition(g, transition);
         }
     }
 
-    public static void drawStates(Graphics g, Set<State> states) {
-        for (State state : states) {
+    public static void drawStates(Graphics g, Set<TMState> states) {
+        for (TMState state : states) {
             drawState(g, state);
         }
     }
 
-    public static void drawAutomaton(Graphics g, Automaton automaton) {
-        drawTransitions(g, automaton.getTransitions());
-        drawStates(g, automaton.getStates());
-        drawInitialStateArrow(g, automaton.getInitialState());
+    public static void drawTuringMachine(Graphics g, TuringMachine turingMachine) {
+        drawTransitions(g, turingMachine.getTransitions());
+        drawStates(g, turingMachine.getStates());
+        drawInitialStateArrow(g, turingMachine.getInitialState());
     }
 
     public static void drawTape(Graphics g, char[] tape, int posx) {

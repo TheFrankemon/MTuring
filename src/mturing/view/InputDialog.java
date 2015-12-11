@@ -1,6 +1,6 @@
 package mturing.view;
 
-import mturing.model.Automaton;
+import mturing.model.TuringMachine;
 import static mturing.view.MainFrame.setMaterialLNF;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,11 +22,11 @@ public class InputDialog extends JDialog {
     private JPanel contentPane;
     private JTextField textBox;
     private JButton okBtn;
-    private Automaton automaton;
+    private TuringMachine turingMachine;
     
-    public InputDialog(JFrame parent, Automaton automaton) {
+    public InputDialog(JFrame parent, TuringMachine tm) {
         super(parent);
-        this.automaton = automaton;
+        this.turingMachine = tm;
         initializeComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack(); 
@@ -72,8 +72,8 @@ public class InputDialog extends JDialog {
     }
     
     private void execute() {
-        automaton.start(textBox.getText());
+        turingMachine.start(textBox.getText());
         dispose();
-        new ResultsFrame(automaton);
+        new ResultsFrame(turingMachine);
     }
 }

@@ -5,8 +5,8 @@ import mturing.view.TransitionSymbolDialog;
 import mturing.view.MainFrame.DrawingState;
 import mturing.view.MainFrame.ModState;
 import mturing.data.Constants;
-import mturing.model.State;
-import mturing.model.Transition;
+import mturing.model.TMState;
+import mturing.model.TMTransition;
 import mturing.model.basics.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -17,9 +17,9 @@ import javax.swing.SwingUtilities;
 
 public class MouseHandler implements MouseListener, MouseMotionListener {
 
-    private State selectedState;
-    private State startState;
-    private State endState;
+    private TMState selectedState;
+    private TMState startState;
+    private TMState endState;
     private Iterator iter;
     private boolean found;
     private JFrame parent;
@@ -44,7 +44,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
     }
 
     private void handleStateCreation(Point clickedPoint) {
-        MainFrame.getAutomaton().createState(clickedPoint);
+        MainFrame.getTuringMachine().createState(clickedPoint);
         MainFrame.drawingState = DrawingState.Drawing;
     }
     
@@ -53,30 +53,30 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
         if (selectedState != null) {
             if (startState == null) {
                 startState = selectedState;
-                startState.setType(State.StateType.START);
+                startState.setType(TMState.StateType.START);
             } else if (endState == null) {
                 endState = selectedState;
-                endState.setType(State.StateType.END);
+                endState.setType(TMState.StateType.END);
             }
             MainFrame.drawingState = DrawingState.Drawing;
         }
         if (endState != null && startState != null) {
-            new TransitionSymbolDialog(parent, MainFrame.getAutomaton().createTransition(startState, endState));
-            startState.setType(State.StateType.NORMAL);
-            endState.setType(State.StateType.NORMAL);
+            new TransitionSymbolDialog(parent, MainFrame.getTuringMachine().createTransition(startState, endState));
+            startState.setType(TMState.StateType.NORMAL);
+            endState.setType(TMState.StateType.NORMAL);
             reset();
             MainFrame.drawingState = DrawingState.Drawing;
         }
     }
     
     private void handleTransitionDeletion(Point clickedPoint) {
-        iter = MainFrame.getAutomaton().getTransitions().iterator();
+        iter = MainFrame.getTuringMachine().getTransitions().iterator();
         found = false;
-        Transition current;
+        TMTransition current;
         while (iter.hasNext() && !found) {
-            current = (Transition) iter.next();
+            current = (TMTransition) iter.next();
             if (current.checkPointCollision(clickedPoint)) {
-                MainFrame.getAutomaton().removeTransition(current);
+                MainFrame.getTuringMachine().removeTransition(current);
                 MainFrame.drawingState = DrawingState.Drawing;
                 found = true;
             }
@@ -84,13 +84,13 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
     }
     
     private void handleStateDeletion(Point clickedPoint) {
-        iter = MainFrame.getAutomaton().getStates().iterator();
+        iter = MainFrame.getTuringMachine().getStates().iterator();
         found = false;
-        State current;
+        TMState current;
         while (iter.hasNext() && !found) {
-            current = (State) iter.next();
+            current = (TMState) iter.next();
             if (current.checkPointCollision(clickedPoint)) {
-                MainFrame.getAutomaton().removeState(current);
+                MainFrame.getTuringMachine().removeState(current);
                 MainFrame.drawingState = DrawingState.Drawing;
                 found = true;
             }
@@ -99,7 +99,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
     
     private void handleStateSelection(Point clickedPoint) {
         selectedState = null;
-        for (State current : MainFrame.getAutomaton().getStates()) {
+        for (TMState current : MainFrame.getTuringMachine().getStates()) {
             if (current.checkPointCollision(clickedPoint)) {
                 selectedState = current;
             }
@@ -110,13 +110,13 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
         if (selectedState != null) {
             selectedState.getPos().setX(draggedPoint.getX());
             selectedState.getPos().setY(draggedPoint.getY());
-            MainFrame.getAutomaton().updateTransitions();
+            MainFrame.getTuringMachine().updateTransitions();
             MainFrame.drawingState = DrawingState.Drawing;
         }
     }
     
     private void handleStateAccepted(Point clickedPoint) {
-        for (State current : MainFrame.getAutomaton().getStates()) {
+        for (TMState current : MainFrame.getTuringMachine().getStates()) {
             if (current.checkPointCollision(clickedPoint)) {
                 current.updateAccepted();
                 MainFrame.drawingState = DrawingState.Drawing;
@@ -125,9 +125,9 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
     }
     
     private void handleStateInitial(Point clickedPoint) {
-        for (State current : MainFrame.getAutomaton().getStates()) {
+        for (TMState current : MainFrame.getTuringMachine().getStates()) {
             if (current.checkPointCollision(clickedPoint)) {
-                MainFrame.getAutomaton().setInitialState(current);
+                MainFrame.getTuringMachine().setInitialState(current);
                 MainFrame.drawingState = DrawingState.Drawing;
             }
         }

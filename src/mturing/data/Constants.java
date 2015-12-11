@@ -21,4 +21,6 @@ public class Constants {
     public static int RESULTSFRAME_PANEL_WIDTH = 580;
     public static int RESULTSFRAME_PANEL_HEIGHT = 290;
     public static final int STATE_RADIUS = 20;
+    public static final int WORD_INCREASE = 5;
+    public static final char BLANK = 'B';
 }

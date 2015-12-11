@@ -1,12 +1,11 @@
 package mturing.view;
 
 import mturing.data.Constants;
-import mturing.model.Automaton;
-import mturing.model.Configuration;
+import mturing.model.TuringMachine;
+import mturing.model.TMConfiguration;
 import static mturing.view.MainFrame.setMaterialLNF;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,13 +30,13 @@ public class ResultsFrame extends JFrame {
     private Graphics dbg;
     private BufferedImage doubleBuffer;
     private JPanel panel;
-    private Automaton automaton;
+    private TuringMachine turingMachine;
     private JButton stepBtn;
     private char[] ass = {'s','a','l','a','d','a','s','s'};
 
-    public ResultsFrame(Automaton automaton) {
+    public ResultsFrame(TuringMachine tm) {
         setVisible(true);
-        this.automaton = automaton;
+        this.turingMachine = tm;
         initialize();
     }
 
@@ -61,21 +60,20 @@ public class ResultsFrame extends JFrame {
         panel = new JPanel();
         panel.setBackground(Color.DARK_GRAY);
         panel.setBounds(10, 10, Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT);
-        //addConfigurationsPanel(automaton.getConfigurations());
+        //addConfigurationsPanel(turingMachine.getConfigurations());
 
         stepBtn = new JButton(">>>>>>>>");
         stepBtn.setFocusable(false);
         setMaterialLNF(stepBtn);
-        int temp = 200;
         stepBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                paint();
-               // if (automaton.next()) {
-               //     addConfigurationsPanel(automaton.getConfigurations());
-               // } else {
-               //     stepBtn.setEnabled(false);
-               // }
+                if (turingMachine.next()) {
+                    //addConfigurationsPanel(turingMachine.getConfigurations());
+                } else {
+                    stepBtn.setEnabled(false);
+                }
             }
         });
         MainFrame.setMaterialLNF(stepBtn);
@@ -90,16 +88,16 @@ public class ResultsFrame extends JFrame {
         dbg = doubleBuffer.getGraphics();
         dbg.setColor(Color.red);
         dbg.fillRect(0, 0, Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT);
-        Drawer.drawTape(dbg, ass, temp+10);
+        Drawer.drawTape(dbg, ass, 200);
         panel.getGraphics().drawImage(doubleBuffer, 0, 0, this);
     }
     
-    private void addConfigurationsPanel(List<Set<Configuration>> configurations) {
+    /*private void addConfigurationsPanel(List<Set<Configuration>> configurations) {
         JPanel newPanel = new JPanel(new GridLayout(0, 1));
         for (Configuration conf : configurations.get(0)) {
      //       newPanel.add(new ConfigurationPanel(conf));
         }
         panel.add(newPanel);
         panel.revalidate();
-    }
+    }*/
 }

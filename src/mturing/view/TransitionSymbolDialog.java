@@ -1,6 +1,6 @@
 package mturing.view;
 
-import mturing.model.Transition;
+import mturing.model.TMTransition;
 import static mturing.view.MainFrame.setMaterialLNF;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,9 +32,9 @@ public class TransitionSymbolDialog extends JDialog {
     private JButton okBtn;
     private JButton xBtn;
     private JLabel symbols;
-    private Transition transition;
+    private TMTransition transition;
 
-    public TransitionSymbolDialog(JFrame parent, Transition transition) {
+    public TransitionSymbolDialog(JFrame parent, TMTransition transition) {
         super(parent);
         this.transition = transition;
         initializeComponents();
@@ -81,7 +81,7 @@ public class TransitionSymbolDialog extends JDialog {
         okBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (transition.getSymbols().size() > 0) {
+                if (transition.getOptions().size() > 0) {
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Transition doesn't contain any symbol!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -116,17 +116,17 @@ public class TransitionSymbolDialog extends JDialog {
     }
 
     private void addSymbol() {
-        if (textBox.getText().length() == 0) {
+        /*if (textBox.getText().length() == 0) {
             transition.addSymbol('\u03B5');
         } else {
             transition.addSymbol(textBox.getText().charAt(0));
             textBox.setText("");
         }
-        symbols.setText(transition.getTransitionText());
+        symbols.setText(transition.getTransitionText());*/
     }
 
     private void removeTransition() {
-        MainFrame.getAutomaton().getTransitions().remove(transition);
+        MainFrame.getTuringMachine().getTransitions().remove(transition);
         dispose();
     }
     
