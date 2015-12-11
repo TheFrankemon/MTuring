@@ -12,15 +12,13 @@ package mturing.data;
  */
 public class Constants {
     
-    public static int WINDOW_WIDTH = 800;
-    public static int WINDOW_HEIGHT = 600;
-    public static int RESULTS_WIDTH = 600;
-    public static int RESULTS_HEIGHT = 300;
-    public static int RESULTS_WINDOW_WIDTH = 610;
-    public static int RESULTS_WINDOW_HEIGHT = 370;
-    public static int PANEL_WIDTH = 770;
-    public static int PANEL_HEIGHT = 520;
-    public static int CONFIGURATION_WIDTH = 100;
-    public static int CONFIGURATION_HEIGHT = 30;
+    public static int MAINFRAME_WIDTH = 800;
+    public static int MAINFRAME_HEIGHT = 600;
+    public static int MAINFRAME_PANEL_WIDTH = 770;
+    public static int MAINFRAME_PANEL_HEIGHT = 520;
+    public static int RESULTSFRAME_WIDTH = 610;
+    public static int RESULTSFRAME_HEIGHT = 370;
+    public static int RESULTSFRAME_PANEL_WIDTH = 580;
+    public static int RESULTSFRAME_PANEL_HEIGHT = 290;
     public static final int STATE_RADIUS = 20;
 }

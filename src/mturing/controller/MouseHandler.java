@@ -39,7 +39,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 
     private Point getClickedPoint(MouseEvent e) {
         int x = e.getX();
-        int y = Constants.PANEL_HEIGHT - e.getY();
+        int y = Constants.MAINFRAME_PANEL_HEIGHT - e.getY();
         return new Point(x, y);
     }
 
