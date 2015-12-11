@@ -21,12 +21,12 @@ import mturing.view.MainFrame;
  */
 public class TuringMachine {
     
-    private Set<State> states;
+    private Set<TMState> states;
     private List<TMTransition> transitions;
     //private List<Set<TMConfiguration>> configurations;
     private TMConfiguration configuration;
-    private List<State> reachableStates;
-    private State initialState;
+    private List<TMState> reachableStates;
+    private TMState initialState;
     private int createdStatesQuantity;
     
     public TuringMachine() {
@@ -41,7 +41,7 @@ public class TuringMachine {
     /**
      * @return the states
      */
-    public Set<State> getStates() {
+    public Set<TMState> getStates() {
         return states;
     }
 
@@ -66,14 +66,14 @@ public class TuringMachine {
     /**
      * @return the reachableStates
      */
-    public List<State> getReachableStates() {
+    public List<TMState> getReachableStates() {
         return reachableStates;
     }
 
     /**
      * @return the initialState
      */
-    public State getInitialState() {
+    public TMState getInitialState() {
         return initialState;
     }
 
@@ -87,7 +87,7 @@ public class TuringMachine {
     /**
      * @param states the states to set
      */
-    public void setStates(Set<State> states) {
+    public void setStates(Set<TMState> states) {
         this.states = states;
     }
 
@@ -112,14 +112,14 @@ public class TuringMachine {
     /**
      * @param reachableStates the reachableStates to set
      */
-    public void setReachableStates(List<State> reachableStates) {
+    public void setReachableStates(List<TMState> reachableStates) {
         this.reachableStates = reachableStates;
     }
 
     /**
      * @param initialState the initialState to set
      */
-    public void setInitialState(State initialState) {
+    public void setInitialState(TMState initialState) {
         this.initialState = initialState;
     }
 
@@ -130,16 +130,16 @@ public class TuringMachine {
         this.createdStatesQuantity = createdStatesQuantity;
     }
     
-    public void addState(State state) {
+    public void addState(TMState state) {
         states.add(state);
         createdStatesQuantity++;
     }
     
     public void createState(Point clickedPoint) {
-        addState(new State(String.format("q%d", createdStatesQuantity), false, clickedPoint));
+        addState(new TMState(String.format("q%d", createdStatesQuantity), false, clickedPoint));
     }
     
-    public TMTransition createTransition(State initial, State next) {
+    public TMTransition createTransition(TMState initial, TMState next) {
         TMTransition newTransition = new TMTransition(initial, next);
         int i = 0;
         boolean found = false;
@@ -160,7 +160,7 @@ public class TuringMachine {
         transitions.add(transition);
     }
     
-    public void removeState(State state) {
+    public void removeState(TMState state) {
         if (state == initialState) {
             initialState = null;
         }
@@ -230,7 +230,7 @@ public class TuringMachine {
                 try {
                     configuration = transition.execute(configuration);
                     return true;
-                } catch (TransitionException ex) {
+                } catch (TMTransitionException ex) {
                     configuration.setDead(true);
                 }
             }
@@ -239,7 +239,7 @@ public class TuringMachine {
     }
     
     private boolean checkAcceptedStates() {
-        for (State state : states) {
+        for (TMState state : states) {
             if (state.isAccepted()) {
                 return true;
             }
@@ -247,11 +247,11 @@ public class TuringMachine {
         return false;
     }
     
-    public void validate() throws AutomatonException {
+    public void validate() throws TMException {
         if (initialState == null) {
-            throw new AutomatonException("No initial state found.");
+            throw new TMException("No initial state found.");
         } else if (!checkAcceptedStates()) {
-            throw new AutomatonException("Must exist at least one accepted state.");
+            throw new TMException("Must exist at least one accepted state.");
         }
     }
     
@@ -274,13 +274,13 @@ public class TuringMachine {
    }
     
     public void removeUnreachableStates() {
-        Set<State> unreachableStates = new HashSet<>();
-        for (State current : states) {
+        Set<TMState> unreachableStates = new HashSet<>();
+        for (TMState current : states) {
             if (!reachableStates.contains(current)) {
                 unreachableStates.add(current);
             }
         }
-        for (State current : unreachableStates) {
+        for (TMState current : unreachableStates) {
             removeState(current);
         }
         MainFrame.drawingState = MainFrame.DrawingState.Drawing;

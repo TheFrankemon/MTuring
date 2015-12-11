@@ -1,8 +1,8 @@
 package mturing.view;
 
 import mturing.data.Constants;
-import mturing.model.Automaton;
-import mturing.model.Configuration;
+import mturing.model.TuringMachine;
+import mturing.model.TMConfiguration;
 import static mturing.view.MainFrame.setMaterialLNF;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -29,12 +29,12 @@ public class ResultsFrame extends JFrame {
 
     private JScrollPane scroll;
     private JPanel panel;
-    private Automaton automaton;
+    private TuringMachine turingMachine;
     private JButton stepBtn;
 
-    public ResultsFrame(Automaton automaton) {
+    public ResultsFrame(TuringMachine tm) {
         setVisible(true);
-        this.automaton = automaton;
+        this.turingMachine = tm;
         initialize();
     }
 
@@ -57,7 +57,7 @@ public class ResultsFrame extends JFrame {
 
         panel = new JPanel(new GridLayout(1, 0));
         panel.setBackground(Color.DARK_GRAY);
-        addConfigurationsPanel(automaton.getConfigurations());
+        //addConfigurationsPanel(turingMachine.getConfigurations());
 
         scroll = new JScrollPane(panel);
         scroll.setBackground(Color.DARK_GRAY);
@@ -69,8 +69,8 @@ public class ResultsFrame extends JFrame {
         stepBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (automaton.next()) {
-                    addConfigurationsPanel(automaton.getConfigurations());
+                if (turingMachine.next()) {
+                    //addConfigurationsPanel(turingMachine.getConfigurations());
                 } else {
                     stepBtn.setEnabled(false);
                 }
@@ -83,12 +83,12 @@ public class ResultsFrame extends JFrame {
         getContentPane().add(stepBtn);
     }
 
-    private void addConfigurationsPanel(List<Set<Configuration>> configurations) {
+    /*private void addConfigurationsPanel(List<Set<Configuration>> configurations) {
         JPanel newPanel = new JPanel(new GridLayout(0, 1));
         for (Configuration conf : configurations.get(0)) {
             newPanel.add(new ConfigurationPanel(conf));
         }
         panel.add(newPanel);
         panel.revalidate();
-    }
+    }*/
 }

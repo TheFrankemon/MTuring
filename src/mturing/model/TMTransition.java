@@ -24,13 +24,13 @@ public class TMTransition {
         LEFT, RIGHT
     };
     
-    private State initialState;
+    private TMState initialState;
     private Set<TMTransitionInfo> options;
-    private State nextState;
+    private TMState nextState;
     private Point startPos;
     private Point endPos;
     
-    public TMTransition(State initialState, State nextState) {
+    public TMTransition(TMState initialState, TMState nextState) {
         this.initialState = initialState;
         this.nextState = nextState;
         this.options = new HashSet<>();
@@ -40,7 +40,7 @@ public class TMTransition {
     /**
      * @return the initialState
      */
-    public State getInitialState() {
+    public TMState getInitialState() {
         return initialState;
     }
 
@@ -54,7 +54,7 @@ public class TMTransition {
     /**
      * @return the nextState
      */
-    public State getNextState() {
+    public TMState getNextState() {
         return nextState;
     }
 
@@ -79,7 +79,7 @@ public class TMTransition {
     /**
      * @param initialState the initialState to set
      */
-    public void setInitialState(State initialState) {
+    public void setInitialState(TMState initialState) {
         this.initialState = initialState;
     }
 
@@ -93,7 +93,7 @@ public class TMTransition {
     /**
      * @param nextState the nextState to set
      */
-    public void setNextState(State nextState) {
+    public void setNextState(TMState nextState) {
         this.nextState = nextState;
     }
 
@@ -132,13 +132,13 @@ public class TMTransition {
         return nextConfigurations;
     }*/
     
-    public TMConfiguration execute(TMConfiguration current) throws TransitionException {        
+    public TMConfiguration execute(TMConfiguration current) throws TMTransitionException {        
         if (current.getState().equals(initialState)) {
             for (TMTransitionInfo info : options) {
                 return current.execute(info);
             }
         }
-        throw new TransitionException("There are no transitions to be executed!");
+        throw new TMTransitionException("There are no transitions to be executed!");
     }
     
     public String getTransitionText() {

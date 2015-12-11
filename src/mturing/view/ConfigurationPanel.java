@@ -1,7 +1,7 @@
 package mturing.view;
 
 import mturing.data.Constants;
-import mturing.model.Configuration;
+import mturing.model.TMConfiguration;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
@@ -14,17 +14,17 @@ import javax.swing.JPanel;
  */
 public class ConfigurationPanel extends JPanel {
     
-    private final Configuration configuration;
+    private final TMConfiguration configuration;
     private JLabel label;
     
-    public ConfigurationPanel(Configuration configuration) {
+    public ConfigurationPanel(TMConfiguration configuration) {
         this.configuration = configuration;
         initComponents();
     }
 
     private void initComponents() {
         setBackground(Color.LIGHT_GRAY);
-        if (configuration.isValid()) {
+        if (configuration.isAccepted()) {
             setBackground(Color.GREEN);
         } else if (configuration.isDead()) {
             setBackground(Color.RED);

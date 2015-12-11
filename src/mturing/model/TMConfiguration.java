@@ -16,19 +16,19 @@ import mturing.data.Constants;
  */
 public class TMConfiguration {
     
-    private State state;
+    private TMState state;
     private char[] word;
     private int head;
     private boolean dead;
     
-    public TMConfiguration(State state, char[] word, int head) {
+    public TMConfiguration(TMState state, char[] word, int head) {
         this.state = state;
         this.word = word;
         this.head = head;
         this.dead = false;
     }
 
-    public TMConfiguration(State state, char[] word, int head, boolean dead) {
+    public TMConfiguration(TMState state, char[] word, int head, boolean dead) {
         this.state = state;
         this.word = word;
         this.head = head;
@@ -38,7 +38,7 @@ public class TMConfiguration {
     /**
      * @return the state
      */
-    public State getState() {
+    public TMState getState() {
         return state;
     }
 
@@ -70,7 +70,7 @@ public class TMConfiguration {
     /**
      * @param state the state to set
      */
-    public void setState(State state) {
+    public void setState(TMState state) {
         this.state = state;
     }
 
@@ -95,7 +95,7 @@ public class TMConfiguration {
         this.dead = dead;
     }
     
-    public TMConfiguration execute(TMTransitionInfo info) throws TransitionException {
+    public TMConfiguration execute(TMTransitionInfo info) throws TMTransitionException {
         if (word[head] == info.getRead()) {
             word[head] = info.getWrite();
             if (info.getMovement() == TMTransition.TMMovement.LEFT) {
@@ -108,7 +108,7 @@ public class TMConfiguration {
         } else {
         }
         
-        throw new TransitionException(word[head] + " doesn't match with " + info.getRead());
+        throw new TMTransitionException(word[head] + " doesn't match with " + info.getRead());
     }
     
     public void checkWordLength() {

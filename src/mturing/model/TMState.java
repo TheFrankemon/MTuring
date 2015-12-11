@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * @author Allan Leon
  */
-public class State {
+public class TMState {
     
     public enum StateType {
         NORMAL, START, END
@@ -25,14 +25,14 @@ public class State {
     private Point pos;
     private StateType type;
     
-    public State(String name, boolean accepted) {
+    public TMState(String name, boolean accepted) {
         this.name = name;
         this.accepted = accepted;
         this.pos = new Point(0, 0);
         this.type = StateType.NORMAL;
     }
     
-    public State(String name, boolean accepted, Point pos) {
+    public TMState(String name, boolean accepted, Point pos) {
         this.name = name;
         this.accepted = accepted;
         this.pos = pos;
@@ -119,7 +119,7 @@ public class State {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final State other = (State) obj;
+        final TMState other = (TMState) obj;
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }

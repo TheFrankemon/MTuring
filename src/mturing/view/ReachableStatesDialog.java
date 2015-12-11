@@ -1,6 +1,5 @@
 package mturing.view;
 
-import mturing.model.Automaton;
 import static mturing.view.MainFrame.setMaterialLNF;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import mturing.model.TuringMachine;
 
 /**
  *
@@ -23,11 +23,11 @@ public class ReachableStatesDialog extends JDialog {
     private JLabel textLbl;
     private JButton yesBtn;
     private JButton noBtn;
-    private Automaton automaton;
+    private TuringMachine turingMachine;
 
-    public ReachableStatesDialog(JFrame parent, Automaton automaton) {
+    public ReachableStatesDialog(JFrame parent, TuringMachine automaton) {
         super(parent);
-        this.automaton = automaton;
+        this.turingMachine = automaton;
         initializeComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
@@ -57,7 +57,7 @@ public class ReachableStatesDialog extends JDialog {
         yesBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                automaton.removeUnreachableStates();
+                turingMachine.removeUnreachableStates();
                 dispose();
             }
         });

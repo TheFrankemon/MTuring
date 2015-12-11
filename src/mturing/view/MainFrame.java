@@ -3,8 +3,8 @@ package mturing.view;
 import mturing.controller.MouseHandler;
 import mturing.data.Constants;
 import mturing.drawer.Drawer;
-import mturing.model.Automaton;
-import mturing.model.AutomatonException;
+import mturing.model.TuringMachine;
+import mturing.model.TMException;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -45,7 +45,7 @@ public class MainFrame extends JFrame implements ActionListener {
     public static DrawingState drawingState;
     public static ModState modState;
 
-    private static Automaton automaton;
+    private static TuringMachine turingMachine;
 
     private JPanel panel;
     private JToggleButton stateTool;
@@ -61,7 +61,7 @@ public class MainFrame extends JFrame implements ActionListener {
      * Create the frame.
      */
     public MainFrame() {
-        automaton = new Automaton();
+        turingMachine = new TuringMachine();
         drawingState = DrawingState.Drawing;
         modState = ModState.Creating;
         initialize();
@@ -175,23 +175,23 @@ public class MainFrame extends JFrame implements ActionListener {
         dbg = doubleBuffer.getGraphics();
         dbg.setColor(Color.DARK_GRAY);
         dbg.fillRect(0, 0, Constants.PANEL_WIDTH, Constants.PANEL_HEIGHT);
-        Drawer.drawAutomaton(dbg, automaton);
+        Drawer.drawAutomaton(dbg, turingMachine);
         panel.getGraphics().drawImage(doubleBuffer, 0, 0, this);
         drawingState = DrawingState.Waiting;
     }
 
-    public static Automaton getAutomaton() {
-        return automaton;
+    public static TuringMachine getTuringMachine() {
+        return turingMachine;
     }
 
     private void showInputDialog() {
         try {
-            if (!automaton.checkReachableStates()) {
-                new ReachableStatesDialog(this, automaton);
+            if (!turingMachine.checkReachableStates()) {
+                new ReachableStatesDialog(this, turingMachine);
             }
-            automaton.validate();
-            new InputDialog(this, automaton);
-        } catch (AutomatonException ex) {
+            turingMachine.validate();
+            new InputDialog(this, turingMachine);
+        } catch (TMException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
