@@ -70,7 +70,7 @@ public class ResultsFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                paint();
                 if (turingMachine.next()) {
-                    System.out.println(turingMachine.getConfiguration().getWordString());
+                    System.out.println(turingMachine.getConfiguration().getWordString() + " " + turingMachine.getConfiguration().getHead() + turingMachine.getConfiguration().getWord()[turingMachine.getConfiguration().getHead()] + " " + turingMachine.getConfiguration().getState().getName());
                     //addConfigurationsPanel(turingMachine.getConfigurations());
                 } else {
                     stepBtn.setEnabled(false);
@@ -89,7 +89,7 @@ public class ResultsFrame extends JFrame {
         dbg = doubleBuffer.getGraphics();
         dbg.setColor(Color.red);
         dbg.fillRect(0, 0, Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT);
-        Drawer.drawTape(dbg, ass, 200);
+        Drawer.drawTape(dbg, turingMachine.getConfiguration().getWord(), 200);
         panel.getGraphics().drawImage(doubleBuffer, 0, 0, this);
     }
     

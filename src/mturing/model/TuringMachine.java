@@ -225,16 +225,19 @@ public class TuringMachine {
     }
     
     public boolean next() {
+        boolean dead = true;
         if (!configuration.isDead()) {
             for (TMTransition transition : transitions) {
                 try {
                     configuration = transition.execute(configuration);
+                    dead = false;
                     return true;
                 } catch (TMTransitionException ex) {
-                    configuration.setDead(true);
+                    //configuration.setDead(true);
                 }
             }
         }
+        configuration.setDead(dead);
         return false;
     }
     

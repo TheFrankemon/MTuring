@@ -135,7 +135,9 @@ public class TMTransition {
     public TMConfiguration execute(TMConfiguration current) throws TMTransitionException {        
         if (current.getState().equals(initialState)) {
             for (TMTransitionInfo info : options) {
-                return current.execute(info);
+                if (current.matches(info)) {
+                    return current.execute(info, nextState);
+                }
             }
         }
         throw new TMTransitionException("There are no transitions to be executed!");

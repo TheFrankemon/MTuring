@@ -72,7 +72,7 @@ public class TMConfiguration {
     }
     
     public boolean isAccepted() {
-        return state.isAccepted();
+        return dead && state.isAccepted();
     }
 
     /**
@@ -103,20 +103,20 @@ public class TMConfiguration {
         this.dead = dead;
     }
     
-    public TMConfiguration execute(TMTransitionInfo info) throws TMTransitionException {
-        if (word[head] == info.getRead()) {
-            word[head] = info.getWrite();
-            if (info.getMovement() == TMTransition.TMMovement.LEFT) {
-                head--;
-            } else {
-                head++;
-            }
-            checkWordLength();
-            return this;
+    public boolean matches(TMTransitionInfo info) {
+        return word[head] == info.getRead();
+    }
+    
+    public TMConfiguration execute(TMTransitionInfo info, TMState nextState) {
+        word[head] = info.getWrite();
+        if (info.getMovement() == TMTransition.TMMovement.LEFT) {
+            head--;
         } else {
+            head++;
         }
-        
-        throw new TMTransitionException(word[head] + " doesn't match with " + info.getRead());
+        checkWordLength();
+        setState(nextState);
+        return this;
     }
     
     public void checkWordLength() {
