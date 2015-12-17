@@ -26,6 +26,7 @@ public class TMConfiguration {
         this.word = word;
         this.head = head;
         this.dead = false;
+        checkWordLength();
     }
 
     public TMConfiguration(TMState state, char[] word, int head, boolean dead) {
@@ -33,6 +34,7 @@ public class TMConfiguration {
         this.word = word;
         this.head = head;
         this.dead = dead;
+        checkWordLength();
     }
 
     /**
@@ -72,7 +74,7 @@ public class TMConfiguration {
     }
     
     public boolean isAccepted() {
-        return dead && state.isAccepted();
+        return state.isAccepted();
     }
 
     /**
@@ -120,10 +122,15 @@ public class TMConfiguration {
     }
     
     public void checkWordLength() {
-        if (head <= -1) {
-            increaseLeftWord();
-        } else if (head >= word.length) {
-            increaseRightWord();
+        if (head < 20) {
+            while (head < 20) {
+                increaseLeftWord();
+            }
+        }
+        if (head > word.length - 21) {
+            while (head > word.length - 21) {
+                increaseRightWord();
+            }
         }
     }
     

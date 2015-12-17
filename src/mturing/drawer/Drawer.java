@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.util.List;
@@ -282,10 +283,38 @@ public class Drawer {
         drawInitialStateArrow(g, turingMachine.getInitialState());
     }
     
-    public static void drawTape(Graphics g, char[] tape, int posx) {
+    public static void drawTape(Graphics g, TMConfiguration conf, int posx) {
         g.setColor(Color.GREEN);
         g.setFont(new Font("Courier New", Font.BOLD, 30));
-        String shown = new String(tape);
-        g.drawString(shown, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
+        g.drawChars(conf.getWord(), conf.getHead() - 15, 31, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
+        //g.setColor(Color.BLUE);
+        //g.drawChars(conf.getWord(), conf.getHead(), 1, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
+        //g.setColor(Color.GREEN);
+        //g.drawChars(conf.getWord(), conf.getHead() + 1, 10, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
+        //g.drawString(tape, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
+    }
+    
+    public static void drawMachineState(Graphics g, TMConfiguration conf) {
+        if (conf.isAccepted()) {
+            g.setColor(Color.BLUE);
+        } else if (conf.isDead()) {
+            g.setColor(Color.RED);
+        } else {
+            g.setColor(Color.YELLOW);
+        }
+        
+        g.drawOval(385, 15, 50, 50);
+        g.drawString(conf.getState().getName(), 395, 45);
+    }
+    
+    public static void drawTMHead(Graphics g) {
+        int mid = Constants.RESULTSFRAME_PANEL_WIDTH / 2;
+        int[] xs = {mid-13,mid,mid+13};
+        int[] ys = {180,150,180};
+        Polygon arrowTip = new Polygon(xs, ys, 3);
+        g.setColor(Color.YELLOW);
+        g.drawRect(mid - 13, 120, 26, 26);
+        g.fillRect(mid - 1, 170, 3, 80);
+        g.fillPolygon(arrowTip);
     }
 }
