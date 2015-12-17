@@ -284,9 +284,8 @@ public class Drawer {
     
     public static void drawTape(Graphics g, char[] tape, int posx) {
         g.setColor(Color.GREEN);
-        g.setFont(new Font("Segoe UI", Font.PLAIN, 24));
+        g.setFont(new Font("Courier New", Font.BOLD, 30));
         String shown = new String(tape);
         g.drawString(shown, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
-        System.out.printf("%s %d %d\n", shown, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
     }
 }
