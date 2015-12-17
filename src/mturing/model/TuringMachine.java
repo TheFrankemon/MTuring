@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mturing.model.basics.Point;
 import mturing.view.MainFrame;
 
@@ -220,13 +218,11 @@ public class TuringMachine {
     
     public void start(String word) {
         configuration = new TMConfiguration(initialState, word.toCharArray(), 0);
-        configuration.increaseLeftWord();
-        configuration.increaseRightWord();
     }
     
     public boolean next() {
         boolean dead = true;
-        if (!configuration.isDead()) {
+        if (!configuration.isDead() && !configuration.isAccepted()) {
             for (TMTransition transition : transitions) {
                 try {
                     configuration = transition.execute(configuration);

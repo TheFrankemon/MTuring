@@ -1,5 +1,6 @@
 package mturing.view;
 
+import java.awt.BorderLayout;
 import mturing.data.Constants;
 import mturing.model.TuringMachine;
 import mturing.model.TMConfiguration;
@@ -36,12 +37,21 @@ public class ResultsFrame extends JFrame {
     private int mid = Constants.RESULTSFRAME_PANEL_WIDTH / 2;
 
     public ResultsFrame(TuringMachine tm) {
-        setVisible(true);
-        this.turingMachine = tm;
-        initialize();
+        //try {
+            setVisible(true);
+            this.turingMachine = tm;
+            initialize();
+            //Thread.sleep(1000);
+            
+            paint();
+        //} catch (InterruptedException ex) {
+            //Logger.getLogger(ResultsFrame.class.getName()).log(Level.SEVERE, null, ex);
+        //}
     }
 
     private void initialize() {
+        doubleBuffer = new BufferedImage(Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        
         setTitle("Results");
         BufferedImage img;
         try {
@@ -58,9 +68,13 @@ public class ResultsFrame extends JFrame {
         getContentPane().setLayout(null);
         getContentPane().setBackground(Color.BLACK);
 
-        panel = new JPanel();
-        panel.setBackground(new Color(20, 20, 20));
+        panel = new CustomPanel(doubleBuffer);
+        //panel.setBackground(new Color(20, 20, 20));
         panel.setBounds(10, 10, Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT);
+        //panel.setVisible(true);
+        //panel.setLayout(new BorderLayout());
+        //panel.getGraphics().setColor(Color.RED);
+        //panel.getGraphics().fillRect(50, 50, 50, 50);
         //addConfigurationsPanel(turingMachine.getConfigurations());
 
         stepBtn = new JButton(">>>>>>>>");
@@ -69,8 +83,8 @@ public class ResultsFrame extends JFrame {
         stepBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               paint();
                 if (turingMachine.next()) {
+                    paint();
                     System.out.println(turingMachine.getConfiguration().getWordString() + " " + turingMachine.getConfiguration().getHead() + turingMachine.getConfiguration().getWord()[turingMachine.getConfiguration().getHead()] + " " + turingMachine.getConfiguration().getState().getName());
                     //addConfigurationsPanel(turingMachine.getConfigurations());
                 } else {
@@ -83,26 +97,22 @@ public class ResultsFrame extends JFrame {
 
         getContentPane().add(panel);
         getContentPane().add(stepBtn);
-        doubleBuffer = new BufferedImage(Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        
     }
     
     private void paint() {
+        System.out.println("Painting");
         dbg = doubleBuffer.getGraphics();
         dbg.setColor(Color.DARK_GRAY);
         dbg.fillRect(0, 0, Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT);
-        drawTMHead();
-        Drawer.drawTape(dbg, turingMachine.getConfiguration().getWord(), 192);
+        Drawer.drawTMHead(dbg);
+        Drawer.drawTape(dbg, turingMachine.getConfiguration(), 12);
+        Drawer.drawMachineState(dbg, turingMachine.getConfiguration());
         panel.getGraphics().drawImage(doubleBuffer, 0, 0, this);
     }
     
-    private void drawTMHead() {
-        int[] xs = {mid-13,mid,mid+13};
-        int[] ys = {180,150,180};
-        Polygon arrowTip = new Polygon(xs, ys, 3);
-        dbg.setColor(Color.YELLOW);
-        dbg.fillRect(mid - 1, 170, 3, 80);
-        dbg.fillPolygon(arrowTip);
-    }
+    
+    
     /*private void addConfigurationsPanel(List<Set<Configuration>> configurations) {
         JPanel newPanel = new JPanel(new GridLayout(0, 1));
         for (Configuration conf : configurations.get(0)) {
