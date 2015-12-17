@@ -3,11 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/UPB/6to%20Semestre/Automatas%20y%20calculabilidad%202/MTuring/src/mturing/view/TransitionSymbolDialog.java</file>
-            <file>file:/D:/UPB/6to%20Semestre/Automatas%20y%20calculabilidad%202/MTuring/src/mturing/view/ResultsFrame.java</file>
             <file>file:/D:/UPB/6to%20Semestre/Automatas%20y%20calculabilidad%202/MTuring/src/mturing/model/TMConfiguration.java</file>
-            <file>file:/D:/UPB/6to%20Semestre/Automatas%20y%20calculabilidad%202/MTuring/src/mturing/view/MainFrame.java</file>
-            <file>file:/D:/UPB/6to%20Semestre/Automatas%20y%20calculabilidad%202/MTuring/src/mturing/view/InputDialog.java</file>
+            <file>file:/D:/UPB/6to%20Semestre/Automatas%20y%20calculabilidad%202/MTuring/src/mturing/view/ResultsFrame.java</file>
+            <file>file:/D:/UPB/6to%20Semestre/Automatas%20y%20calculabilidad%202/MTuring/src/mturing/model/TuringMachine.java</file>
             <file>file:/D:/UPB/6to%20Semestre/Automatas%20y%20calculabilidad%202/MTuring/src/mturing/drawer/Drawer.java</file>
         </group>
     </open-files>
