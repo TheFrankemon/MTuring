@@ -7,6 +7,7 @@ import static mturing.view.MainFrame.setMaterialLNF;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -32,7 +33,7 @@ public class ResultsFrame extends JFrame {
     private JPanel panel;
     private TuringMachine turingMachine;
     private JButton stepBtn;
-    private char[] ass = {'s','a','l','a','d','a','s','s'};
+    private int mid = Constants.RESULTSFRAME_PANEL_WIDTH / 2;
 
     public ResultsFrame(TuringMachine tm) {
         setVisible(true);
@@ -58,7 +59,7 @@ public class ResultsFrame extends JFrame {
         getContentPane().setBackground(Color.BLACK);
 
         panel = new JPanel();
-        panel.setBackground(Color.DARK_GRAY);
+        panel.setBackground(new Color(20, 20, 20));
         panel.setBounds(10, 10, Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT);
         //addConfigurationsPanel(turingMachine.getConfigurations());
 
@@ -87,12 +88,21 @@ public class ResultsFrame extends JFrame {
     
     private void paint() {
         dbg = doubleBuffer.getGraphics();
-        dbg.setColor(Color.red);
+        dbg.setColor(Color.DARK_GRAY);
         dbg.fillRect(0, 0, Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT);
-        Drawer.drawTape(dbg, turingMachine.getConfiguration().getWord(), 200);
+        drawTMHead();
+        Drawer.drawTape(dbg, turingMachine.getConfiguration().getWord(), 192);
         panel.getGraphics().drawImage(doubleBuffer, 0, 0, this);
     }
     
+    private void drawTMHead() {
+        int[] xs = {mid-13,mid,mid+13};
+        int[] ys = {180,150,180};
+        Polygon arrowTip = new Polygon(xs, ys, 3);
+        dbg.setColor(Color.YELLOW);
+        dbg.fillRect(mid - 1, 170, 3, 80);
+        dbg.fillPolygon(arrowTip);
+    }
     /*private void addConfigurationsPanel(List<Set<Configuration>> configurations) {
         JPanel newPanel = new JPanel(new GridLayout(0, 1));
         for (Configuration conf : configurations.get(0)) {
