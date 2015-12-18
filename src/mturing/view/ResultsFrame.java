@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import mturing.drawer.Drawer;
 import mturing.model.TMTransition;
 
@@ -23,19 +24,29 @@ import mturing.model.TMTransition;
  *
  * @author Allan Leon
  */
-public class ResultsFrame extends JFrame {
+public class ResultsFrame extends JFrame implements ActionListener {
+    
+    enum PlayState {
+        PLAY, PAUSE
+    };
 
     private Graphics dbg;
     private BufferedImage doubleBuffer;
     private JPanel panel;
     private TuringMachine turingMachine;
     private JButton stepBtn;
+    private JButton playBtn;
+    private PlayState playState;
+    private Timer timer;
 
     public ResultsFrame(TuringMachine tm) {
         setVisible(true);
         this.turingMachine = tm;
+        this.playState = PlayState.PAUSE;
         initialize();
         paintStart();
+        timer = new Timer(120, this);
+        timer.start();
     }
 
     private void initialize() {
@@ -67,7 +78,10 @@ public class ResultsFrame extends JFrame {
         stepBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (turingMachine.next()) {
+                if (playState == PlayState.PAUSE) {
+                    step();
+                }
+                /*if (turingMachine.next()) {
                     try {
                         paintMovement();
                         //System.out.println(turingMachine.getConfiguration().getWordString() + " " + turingMachine.getConfiguration().getHead() + turingMachine.getConfiguration().getWord()[turingMachine.getConfiguration().getHead()] + " " + turingMachine.getConfiguration().getState().getName());
@@ -76,15 +90,44 @@ public class ResultsFrame extends JFrame {
                     }
                 } else {
                     stepBtn.setEnabled(false);
-                }
+                }*/
             }
         });
+        
+        playBtn = new JButton("Play");
+        playBtn.setFocusable(false);
+        setMaterialLNF(playBtn);
+        playBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (playState == PlayState.PAUSE) {
+                    playState = PlayState.PLAY;
+                    playBtn.setText("Pause");
+                    stepBtn.setEnabled(false);
+                } else {
+                    playState = PlayState.PAUSE;
+                    playBtn.setText("Play");
+                    stepBtn.setEnabled(true);
+                }
+                /*while (turingMachine.next()) {
+                    try {
+                        Thread.sleep(120);
+                        paintMovement();
+                        //System.out.println(turingMachine.getConfiguration().getWordString() + " " + turingMachine.getConfiguration().getHead() + turingMachine.getConfiguration().getWord()[turingMachine.getConfiguration().getHead()] + " " + turingMachine.getConfiguration().getState().getName());
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ResultsFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }*/
+            }
+        });
+        
         MainFrame.setMaterialLNF(stepBtn);
         stepBtn.setBounds(Constants.RESULTSFRAME_WIDTH / 2 - 60, Constants.RESULTSFRAME_HEIGHT - 65, 120, 30);
+        playBtn.setBounds(Constants.RESULTSFRAME_WIDTH / 2 + 100, Constants.RESULTSFRAME_HEIGHT - 65, 120, 30);
 
         getContentPane().add(panel);
         getContentPane().add(stepBtn);
-        
+        getContentPane().add(playBtn);
     }
     
     private void paintStart() {
@@ -115,5 +158,30 @@ public class ResultsFrame extends JFrame {
             panel.getGraphics().drawImage(doubleBuffer, 0, 0, this);
             x += dx;
         }
+    }
+    
+    private void step() {
+        if (turingMachine.next()) {
+            try {
+                paintMovement();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ResultsFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            stepBtn.setEnabled(false);
+            playBtn.setEnabled(false);
+            timer.stop();
+        }
+    }
+    
+    private void update() {
+        if (playState == PlayState.PLAY) {
+            step();
+        }
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        update();
     }
 }
