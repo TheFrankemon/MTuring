@@ -110,7 +110,7 @@ public class TransitionSymbolDialog extends JDialog {
             }
         });
 
-        xBtn = new JButton("X");
+        xBtn = new JButton("Del");
         xBtn.setFocusable(false);
         setMaterialLNF(xBtn);
         xBtn.addActionListener(new ActionListener() {
@@ -128,14 +128,14 @@ public class TransitionSymbolDialog extends JDialog {
         pipeLbl = new JLabel("|");
         pipeLbl.setForeground(Color.WHITE);
 
-        readBox.setBounds(70, 30, 30, 30);
-        pipeLbl.setBounds(100, 30, 10, 30);
-        writeBox.setBounds(110, 30, 30, 30);
-        commaLbl.setBounds(140, 30, 10, 30);
-        moveBox.setBounds(150, 30, 30, 30);
-        addBtn.setBounds(200, 30, 50, 30);
-        okBtn.setBounds(260, 30, 60, 30);
-        xBtn.setBounds(10, 30, 50, 30);
+        readBox.setBounds(85, 30, 30, 30);
+        pipeLbl.setBounds(117, 30, 10, 30);
+        writeBox.setBounds(125, 30, 30, 30);
+        commaLbl.setBounds(157, 30, 10, 30);
+        moveBox.setBounds(165, 30, 30, 30);
+        addBtn.setBounds(205, 30, 50, 30);
+        okBtn.setBounds(265, 30, 60, 30);
+        xBtn.setBounds(10, 30, 55, 30);
         options.setBounds(10, 80, 350, 20);
 
         contentPane.add(readBox);

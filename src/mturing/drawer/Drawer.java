@@ -267,7 +267,8 @@ public class Drawer {
         g.setColor(Color.DARK_GRAY);
         g.fillRect(state.getPos().getX() - 6, Constants.MAINFRAME_PANEL_HEIGHT - state.getPos().getY() - 8, 15, 15);
         g.setColor(new Color(60, 182, 237));
-        g.drawString(state.getName(), state.getPos().getX() - 5, Constants.MAINFRAME_PANEL_HEIGHT - state.getPos().getY() + 3);
+        g.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        g.drawString(state.getName(), state.getPos().getX() - 7, Constants.MAINFRAME_PANEL_HEIGHT - state.getPos().getY() + 3);
     }
 
     public static void drawTransitions(Graphics g, List<TMTransition> transitions) {
@@ -319,7 +320,7 @@ public class Drawer {
         g.setColor(new Color(60, 182, 237));
         g.drawRect(mid - 10, 120, 20, 28);
         g.drawRect(mid - 11, 119, 22, 30);
-        g.fillRect(mid - 1, 170, 3, 80);
+        g.fillRect(mid - 1, 170, 3, 120);
         g.fillPolygon(arrowTip);
     }
 }

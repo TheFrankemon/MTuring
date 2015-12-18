@@ -152,7 +152,7 @@ public class ResultsFrame extends JFrame implements ActionListener {
             Thread.sleep(60);
             dbg.setColor(Color.DARK_GRAY);
             dbg.fillRect(0, 0, Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT);
-            Drawer.drawTape(dbg, turingMachine.getConfiguration(), 12 + x);
+            Drawer.drawTape(dbg, turingMachine.getConfiguration(), 10 + x);
             Drawer.drawTMHead(dbg);
             Drawer.drawMachineState(dbg, turingMachine.getConfiguration());
             panel.getGraphics().drawImage(doubleBuffer, 0, 0, this);
