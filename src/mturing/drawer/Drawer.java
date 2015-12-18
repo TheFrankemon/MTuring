@@ -7,13 +7,19 @@ import mturing.model.basics.Point;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Polygon;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mturing.model.TMConfiguration;
 import mturing.model.TMTransition;
 import mturing.model.TuringMachine;
@@ -25,7 +31,7 @@ import mturing.model.TuringMachine;
 public class Drawer {
 
     private static final int ARR_SIZE = 5;
-
+    
     private static void putPixel(Graphics g, int x, int y) {
         g.drawLine(x, Constants.MAINFRAME_PANEL_HEIGHT - y, x, Constants.MAINFRAME_PANEL_HEIGHT - y);
     }
@@ -260,8 +266,7 @@ public class Drawer {
         }
         g.setColor(Color.DARK_GRAY);
         g.fillRect(state.getPos().getX() - 6, Constants.MAINFRAME_PANEL_HEIGHT - state.getPos().getY() - 8, 15, 15);
-        g.setColor(Color.MAGENTA);
-        g.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        g.setColor(new Color(60, 182, 237));
         g.drawString(state.getName(), state.getPos().getX() - 5, Constants.MAINFRAME_PANEL_HEIGHT - state.getPos().getY() + 3);
     }
 
@@ -284,27 +289,26 @@ public class Drawer {
     }
     
     public static void drawTape(Graphics g, TMConfiguration conf, int posx) {
-        g.setColor(Color.GREEN);
+        g.setColor(Color.WHITE);
         g.setFont(new Font("Courier New", Font.BOLD, 30));
         g.drawChars(conf.getWord(), conf.getHead() - 15, 31, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
-        //g.setColor(Color.BLUE);
-        //g.drawChars(conf.getWord(), conf.getHead(), 1, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
-        //g.setColor(Color.GREEN);
-        //g.drawChars(conf.getWord(), conf.getHead() + 1, 10, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
-        //g.drawString(tape, posx, Constants.RESULTSFRAME_PANEL_HEIGHT / 2);
     }
     
     public static void drawMachineState(Graphics g, TMConfiguration conf) {
         if (conf.isAccepted()) {
-            g.setColor(Color.BLUE);
+            g.setColor(new Color(60, 182, 237));
         } else if (conf.isDead()) {
             g.setColor(Color.RED);
         } else {
-            g.setColor(Color.YELLOW);
+            g.setColor(Color.WHITE);
         }
         
-        g.drawOval(385, 15, 50, 50);
-        g.drawString(conf.getState().getName(), 395, 45);
+        g.fillOval(520, 15, 50, 50);
+        g.setColor(Color.BLACK);
+        g.drawString(conf.getState().getName(), 528, 48);
+        g.setFont(new Font("Roboto", Font.BOLD, 24));
+        g.setColor(Color.YELLOW);
+        g.drawString("Estado actual:", 360, 48);
     }
     
     public static void drawTMHead(Graphics g) {
@@ -312,8 +316,9 @@ public class Drawer {
         int[] xs = {mid-13,mid,mid+13};
         int[] ys = {180,150,180};
         Polygon arrowTip = new Polygon(xs, ys, 3);
-        g.setColor(Color.YELLOW);
-        g.drawRect(mid - 13, 120, 26, 26);
+        g.setColor(new Color(60, 182, 237));
+        g.drawRect(mid - 10, 120, 20, 28);
+        g.drawRect(mid - 11, 119, 22, 30);
         g.fillRect(mid - 1, 170, 3, 80);
         g.fillPolygon(arrowTip);
     }
