@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 import mturing.model.basics.Point;
 import mturing.view.MainFrame;
 
@@ -19,9 +20,9 @@ import mturing.view.MainFrame;
  */
 public class TuringMachine {
     
+    private static final Logger LOGGER = Logger.getLogger(TuringMachine.class.getName());
     private Set<TMState> states;
     private List<TMTransition> transitions;
-    //private List<Set<TMConfiguration>> configurations;
     private TMConfiguration configuration;
     private List<TMState> reachableStates;
     private TMState initialState;
@@ -32,7 +33,6 @@ public class TuringMachine {
         reachableStates = new ArrayList<>();
         transitions = new ArrayList<>();
         initialState = null;
-        //configurations = new ArrayList<>();
         createdStatesQuantity = 0;
     }
 
@@ -49,13 +49,6 @@ public class TuringMachine {
     public List<TMTransition> getTransitions() {
         return transitions;
     }
-
-    /**
-     * @return the configurations
-     */
-    /*public List<Set<TMConfiguration>> getConfigurations() {
-        return configurations;
-    }*/
     
     public TMConfiguration getConfiguration() {
         return configuration;
@@ -95,13 +88,6 @@ public class TuringMachine {
     public void setTransitions(List<TMTransition> transitions) {
         this.transitions = transitions;
     }
-
-    /**
-     * @param configurations the configurations to set
-     */
-    /*public void setConfigurations(List<Set<TMConfiguration>> configurations) {
-        this.configurations = configurations;
-    }*/
     
     public void setConfiguration(TMConfiguration configuration) {
         this.configuration = configuration;
@@ -177,45 +163,6 @@ public class TuringMachine {
         transitions.remove(transition);
     }
     
-    /*
-    public void start(String word) {
-        configurations.clear();
-        Set<Configuration> startList = new HashSet<>();
-        startList.add(new Configuration(initialState, word));
-        configurations.add(startList);
-    }
-    
-    public boolean next() {
-        Set<Configuration> nextList = new HashSet<>();
-        boolean ok;
-        for (Configuration current : configurations.get(0)) {
-            if (!current.isDead() && !current.isValid()) {
-                ok = false;
-                for (Transition transition : transitions) {
-                    try {
-                        for (Configuration newConf : transition.execute(current)) {
-                            nextList.add(newConf);
-                            ok = true;
-                        }
-                    } catch (TransitionException ex) {
-                        Logger.getLogger(Automaton.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                if (!ok) {
-                    current.setDead(true);
-                    nextList.add(current);
-                }
-            }
-        }
-        if (nextList.size() > 0) {
-            configurations.add(nextList);
-            configurations.remove(0);
-            return true;
-        }
-        return false;
-    }
-    */
-    
     public void start(String word) {
         configuration = new TMConfiguration(initialState, word.toCharArray(), 0);
     }
@@ -229,7 +176,7 @@ public class TuringMachine {
                     dead = false;
                     return true;
                 } catch (TMTransitionException ex) {
-                    //configuration.setDead(true);
+                    LOGGER.info(ex.getMessage());
                 }
             }
         }

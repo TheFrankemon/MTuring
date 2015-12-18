@@ -9,6 +9,7 @@ package mturing.model;
 import java.util.Arrays;
 import java.util.Objects;
 import mturing.data.Constants;
+import mturing.model.TMTransition.TMMovement;
 
 /**
  *
@@ -20,6 +21,7 @@ public class TMConfiguration {
     private char[] word;
     private int head;
     private boolean dead;
+    private TMMovement lastMove;
     
     public TMConfiguration(TMState state, char[] word, int head) {
         this.state = state;
@@ -65,6 +67,10 @@ public class TMConfiguration {
     public int getHead() {
         return head;
     }
+    
+    public TMMovement getLastMove() {
+        return lastMove;
+    }
 
     /**
      * @return the dead
@@ -105,6 +111,10 @@ public class TMConfiguration {
         this.dead = dead;
     }
     
+    public void setLastMove(TMMovement move) {
+        this.lastMove = move;
+    }
+    
     public boolean matches(TMTransitionInfo info) {
         return word[head] == info.getRead();
     }
@@ -116,6 +126,7 @@ public class TMConfiguration {
         } else {
             head++;
         }
+        lastMove = info.getMovement();
         checkWordLength();
         setState(nextState);
         return this;
