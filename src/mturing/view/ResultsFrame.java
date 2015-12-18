@@ -1,20 +1,15 @@
 package mturing.view;
 
-import java.awt.BorderLayout;
 import mturing.data.Constants;
 import mturing.model.TuringMachine;
-import mturing.model.TMConfiguration;
 import static mturing.view.MainFrame.setMaterialLNF;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -22,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import mturing.drawer.Drawer;
+import mturing.model.TMTransition;
 
 /**
  *
@@ -34,19 +30,12 @@ public class ResultsFrame extends JFrame {
     private JPanel panel;
     private TuringMachine turingMachine;
     private JButton stepBtn;
-    private int mid = Constants.RESULTSFRAME_PANEL_WIDTH / 2;
 
     public ResultsFrame(TuringMachine tm) {
-        //try {
-            setVisible(true);
-            this.turingMachine = tm;
-            initialize();
-            //Thread.sleep(1000);
-            
-            paint();
-        //} catch (InterruptedException ex) {
-            //Logger.getLogger(ResultsFrame.class.getName()).log(Level.SEVERE, null, ex);
-        //}
+        setVisible(true);
+        this.turingMachine = tm;
+        initialize();
+        paintStart();
     }
 
     private void initialize() {
@@ -69,13 +58,8 @@ public class ResultsFrame extends JFrame {
         getContentPane().setBackground(Color.BLACK);
 
         panel = new CustomPanel(doubleBuffer);
-        //panel.setBackground(new Color(20, 20, 20));
+        panel.setBackground(new Color(20, 20, 20));
         panel.setBounds(10, 10, Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT);
-        //panel.setVisible(true);
-        //panel.setLayout(new BorderLayout());
-        //panel.getGraphics().setColor(Color.RED);
-        //panel.getGraphics().fillRect(50, 50, 50, 50);
-        //addConfigurationsPanel(turingMachine.getConfigurations());
 
         stepBtn = new JButton(">>>>>>>>");
         stepBtn.setFocusable(false);
@@ -84,9 +68,12 @@ public class ResultsFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (turingMachine.next()) {
-                    paint();
-                    System.out.println(turingMachine.getConfiguration().getWordString() + " " + turingMachine.getConfiguration().getHead() + turingMachine.getConfiguration().getWord()[turingMachine.getConfiguration().getHead()] + " " + turingMachine.getConfiguration().getState().getName());
-                    //addConfigurationsPanel(turingMachine.getConfigurations());
+                    try {
+                        paintMovement();
+                        //System.out.println(turingMachine.getConfiguration().getWordString() + " " + turingMachine.getConfiguration().getHead() + turingMachine.getConfiguration().getWord()[turingMachine.getConfiguration().getHead()] + " " + turingMachine.getConfiguration().getState().getName());
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ResultsFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 } else {
                     stepBtn.setEnabled(false);
                 }
@@ -100,8 +87,7 @@ public class ResultsFrame extends JFrame {
         
     }
     
-    private void paint() {
-        System.out.println("Painting");
+    private void paintStart() {
         dbg = doubleBuffer.getGraphics();
         dbg.setColor(Color.DARK_GRAY);
         dbg.fillRect(0, 0, Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT);
@@ -111,14 +97,23 @@ public class ResultsFrame extends JFrame {
         panel.getGraphics().drawImage(doubleBuffer, 0, 0, this);
     }
     
-    
-    
-    /*private void addConfigurationsPanel(List<Set<Configuration>> configurations) {
-        JPanel newPanel = new JPanel(new GridLayout(0, 1));
-        for (Configuration conf : configurations.get(0)) {
-     //       newPanel.add(new ConfigurationPanel(conf));
+    private void paintMovement() throws InterruptedException {
+        dbg = doubleBuffer.getGraphics();
+        int x = 20;
+        int dx = -2;
+        if (turingMachine.getConfiguration().getLastMove() == TMTransition.TMMovement.LEFT) {
+            x = -20;
+            dx = 2;
         }
-        panel.add(newPanel);
-        panel.revalidate();
-    }*/
+        while (x != 0) {
+            Thread.sleep(60);
+            dbg.setColor(Color.DARK_GRAY);
+            dbg.fillRect(0, 0, Constants.RESULTSFRAME_PANEL_WIDTH, Constants.RESULTSFRAME_PANEL_HEIGHT);
+            Drawer.drawTape(dbg, turingMachine.getConfiguration(), 12 + x);
+            Drawer.drawTMHead(dbg);
+            Drawer.drawMachineState(dbg, turingMachine.getConfiguration());
+            panel.getGraphics().drawImage(doubleBuffer, 0, 0, this);
+            x += dx;
+        }
+    }
 }

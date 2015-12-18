@@ -6,9 +6,7 @@
 
 package mturing.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import mturing.data.Constants;
@@ -110,27 +108,6 @@ public class TMTransition {
     public void setEndPos(Point endPos) {
         this.endPos = endPos;
     }
-    
-    /*public List<Configuration> execute(Configuration current) throws TransitionException {
-        List<Configuration> nextConfigurations = new ArrayList<>();
-        
-        if (current.getState().equals(initialState)) {
-            for (TransitionInfo info : options) {
-                if (current.matches(info.getTop())) {
-                    if (info.getSymbol() == Constants.EPSILON) {
-                        nextConfigurations.add(new Configuration(nextState,
-                                current.getWord(), current.updateStack(info.getNextTop())));
-                    } else if (!current.wordIsEmpty()) {
-                        if (current.getWord().charAt(0) == info.getSymbol()) {
-                        nextConfigurations.add(new Configuration(nextState,
-                                current.getWord().substring(1), current.updateStack(info.getNextTop())));
-                        }
-                    }
-                }
-            }
-        }
-        return nextConfigurations;
-    }*/
     
     public TMConfiguration execute(TMConfiguration current) throws TMTransitionException {        
         if (current.getState().equals(initialState)) {
